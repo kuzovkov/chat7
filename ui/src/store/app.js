@@ -32,6 +32,12 @@ export default {
     },
     setUsername(state, username){
       state.username = username;
+      console.log('setUsername', username);
+      Storage.set('username', username);
+    },
+    clearUsername(state){
+      state.username = null;
+      Storage.del('username');
     }
   },
   actions: {
@@ -48,6 +54,10 @@ export default {
         commit('setError', parseError(error.message));
       }
     },
+
+    clearUsername({commit}){
+      commit('clearUsername');
+    },
     async setUsername({commit}, {username, room}){
       commit('clearError');
       commit('setLoading', true);
@@ -61,9 +71,9 @@ export default {
         listReceived = true;
         console.log('users_online:', users_online, 'listReceived:', listReceived);
       }
-      try{
+      //try{
         let socket = null;
-        socket = new Socket({options: {username, room}});
+        socket = new Socket({options: {room}});
         console.log('this.socket:', socket)
         socket.setHandler('users_online', fillUsersOnline.bind(this))
         socket.connect();
@@ -72,15 +82,18 @@ export default {
         console.log('this.users_online:', users_online, username)
         if (users_online.indexOf(username) === -1){
           commit('setUsername', username);
+          commit('setLoading', false);
         } else {
-          throw new Error('his NicName already busy! Choose another');
+          commit('setLoading', false);
+          throw new Error('This NicName already busy! Choose another');
         }
         listReceived = false;
         commit('setLoading', false);
-      }catch(error){
-        commit('setLoading', false);
-        commit('setError', parseError(error.message));
-      }
+    //   }catch(error){
+    //     commit('setLoading', false);
+    //     commit('setError', parseError(error.message));
+    //
+    //   }
     }
 
   },
@@ -89,7 +102,14 @@ export default {
       return state.app;
     },
     username(state){
-      return state.username;
+      if (state.username)
+        return state.username;
+      const username = Storage.get('username');
+      if (username){
+        state.username = username;
+        return username;
+      }
+      return null;
     }
 
   }

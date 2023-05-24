@@ -87,7 +87,7 @@ export class App {
     // for debug
     for (let i = 0; i < 1; i++)
       if (this.stream){
-        this.video = new Video({selector: 'div.video-container'});
+        this.video = new Video({selector: 'div#video-container'});
         this.video.show();
         this.video.attachStream(this.stream);
         this.video.setTitle(this.alias);
@@ -122,6 +122,8 @@ export class App {
   }
 
   sendChatMessage() {
+    if (!this.messageArea)
+      return;
     console.log(this.messageArea.value);
     if (this.messageArea.value.length){
       if (this.p2p_chat){
@@ -135,6 +137,8 @@ export class App {
 
   receiveChatMessage(data){
     //console.log('receiveChatMessage: ', data);
+    if(!this.chatArea)
+      return;
     let date = (new Date()).toLocaleString();
     let alias = data.user;
     if (this.aliases[alias] !== undefined && this.aliases[alias]){
@@ -155,6 +159,8 @@ export class App {
         this.chatMessages[i].user = this.aliases[socket_id];
       }
     }
+    if (!this.chatArea)
+      return;
     this.chatArea.innerHTML = this.chatMessages
       .map(chatMessage => `<span class="user">${chatMessage.user}</span>: ${chatMessage.message} <span class="date">${chatMessage.date}</span>`)
       .join('<br>');
@@ -162,7 +168,10 @@ export class App {
 
   updateUsersList(data){
     console.log('updateUsersList: ', data);
-    this.ice = JSON.parse(window.atob(data.ice))
+    if (!data.ice){
+      return;
+    }
+    this.ice = JSON.parse(window.atob(data.ice)) ;
     console.log('ice:', this.ice);
     if (this.wrtc){
       this.wrtc.setIce(this.ice);
@@ -204,7 +213,7 @@ export class App {
       this.remoteVideos[username].destroy();
       delete this.remoteVideos[username];
     }
-    this.remoteVideos[username] = new Video({selector: 'div.video-container', id: `video-${username}`, name: username});
+    this.remoteVideos[username] = new Video({selector: 'div#video-container', id: `video-${username}`, name: username});
     this.remoteVideos[username].show();
     this.remoteVideos[username].attachStream(stream);
 

@@ -6,6 +6,7 @@ import Error404 from '../components/404.vue'
 import About from '../components/about.vue'
 import FAQ from '../components/faq.vue'
 import Terms from '../components/terms.vue'
+import RoomContainer from '../components/room-container.vue'
 import Room from '../components/room.vue'
 import CheckRoom from '../plugins/check.room'
 
@@ -24,7 +25,7 @@ const routes = [
 
   {
     path: '/room',
-    component: Room,
+    component: RoomContainer,
     name: 'room-index',
     beforeEnter: CheckRoom,
     children: [

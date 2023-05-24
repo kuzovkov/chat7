@@ -72,7 +72,7 @@ class WebsocketServer
      */
     private function onConnection(Request $request): void {
         echo "client-{$request->fd} is connected\n";
-        //var_dump($request);
+        var_dump($request->get);
         $nicname = null;
         $room = null;
         if (isset($request->get)){
@@ -98,6 +98,7 @@ class WebsocketServer
                 $ice = \getIce();
                 foreach ($this->ws->connections as $id){
                     $curr_user = $this->usersRepository->get($id);
+                    printf('id: %s, curr_user: %s,', $id, $curr_user);
                     if ($curr_user['data']['room'] && $curr_user['data']['room'] !== $room)
                         continue;
                     $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));
@@ -247,6 +248,7 @@ class WebsocketServer
         $ice = \getIce();
         foreach ($this->ws->connections as $id){
             $curr_user = $this->usersRepository->get($id);
+            printf('id: %s, curr_user: %s,', $id, $curr_user);
             if ($curr_user['data']['room'] && $curr_user['data']['room'] !== $room)
                 continue;
             $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));

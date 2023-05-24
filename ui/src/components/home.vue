@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import {Socket, sleep} from '../helpers';
+    import {Socket, sleep, parseError} from '../helpers';
     export default {
         data(){
             return {
@@ -50,7 +50,7 @@
                                 this.$router.push(`/room/${this.room}`);
                             })
                             .catch((e) => {
-
+                                this.$store.dispatch('setError', parseError(e.message));
                             })
                     }
                 }
@@ -61,6 +61,7 @@
             }
         },
         created (){
+            this.$store.dispatch('clearUsername');
             window.addEventListener('keypress', (e)=> {
                 if (e.keyCode == 13){
                     document.getElementById('submit-btn').click()
