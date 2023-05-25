@@ -1,3 +1,4 @@
+import {UUID4} from './functions';
 export const Fp2p = {};
 
 Fp2p.BYTES_PER_CHUNK = 12*1024;

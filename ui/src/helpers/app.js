@@ -3,6 +3,7 @@ import {WRTC} from './wrtc'
 import {Video} from './video'
 import {Media} from './media'
 import {Socket} from './socket'
+import {UUID4} from './functions'
 
 export class App {
   sendBtn = null;
@@ -31,24 +32,23 @@ export class App {
 
   constructor(options){
     // this.sendBtn = document.getElementById('send');
-    // this.chatArea = document.getElementById('chat-area');
+    this.options = options;
     // this.screenShareBtn = document.getElementById('screenshare');
     // this.videoToggleBtn = document.getElementById('videotoggle');
     // this.audioToggleBtn = document.getElementById('audiotoggle');
     // this.sendFileBtn = document.getElementById('sendfile');
-    // this.fileInput = document.getElementById('file-input');
+
     // this.screenShareBtn.addEventListener('click', this.screenShare.bind(this));
     // this.videoToggleBtn.addEventListener('click', this.toggleVideo.bind(this));
     // this.audioToggleBtn.addEventListener('click', this.toggleAudio.bind(this));
     // this.sendFileBtn.addEventListener('click', this.sendFiles.bind(this));
-    // this.fileInput.addEventListener('change', this.onFilesSelected.bind(this));
-    // this.messageArea = document.getElementById('message-area');
+    //this.fileInput.addEventListener('change', this.onFilesSelected.bind(this));
+
     // this.sendBtn.addEventListener('click', this.sendChatMessage.bind(this));
     // this.exitBtn = document.getElementById('exit');
     // this.exitBtn.addEventListener('click', this.exit.bind(this));
     // this.aliasInput =  document.getElementById('alias');
     // this.aliasInput.value = this.alias;
-    this.options = options;
     // this.aliasInput.addEventListener('change', this.onChangeAlias.bind(this));
     this.wrtc = new WRTC(this);
     this.filesp2p = Fp2p;
@@ -74,6 +74,13 @@ export class App {
         this.sendChatMessage();
       }
     });
+  }
+
+  onComponentMounted(options){
+    this.chatArea = options.chatArea;
+    this.fileInput = options.fileInput;
+    this.messageArea = options.messageArea;
+    this.fileInput.addEventListener('change', this.onFilesSelected.bind(this));
   }
 
   async getLocalMedia(){
@@ -244,10 +251,10 @@ export class App {
     this.video_off = !this.video_off;
     console.log('toggle video', this.video_off);
     if (this.video_off){
-      this.videoToggleBtn.innerHTML = '<i class="fa-solid fa-video"></i>';
+      //this.videoToggleBtn.innerHTML = '<i class="fa-solid fa-video"></i>';
       this.wrtc.videoOff();
     } else {
-      this.videoToggleBtn.innerHTML = '<i class="fa-solid fa-video-slash"></i>';
+      //this.videoToggleBtn.innerHTML = '<i class="fa-solid fa-video-slash"></i>';
       this.wrtc.videoOn();
     }
   }
@@ -256,10 +263,10 @@ export class App {
     this.audio_off = !this.audio_off;
     console.log('toggle audio', this.audio_off);
     if (this.audio_off){
-      this.audioToggleBtn.innerHTML = '<i class="fa-solid fa-microphone-lines"></i>';
+      //this.audioToggleBtn.innerHTML = '<i class="fa-solid fa-microphone-lines"></i>';
       this.wrtc.audioOff();
     } else {
-      this.audioToggleBtn.innerHTML = '<i class="fa-solid fa-microphone-lines-slash"></i>';
+      //this.audioToggleBtn.innerHTML = '<i class="fa-solid fa-microphone-lines-slash"></i>';
       this.wrtc.audioOn();
     }
   }
@@ -343,21 +350,14 @@ export class App {
         delete this.remoteVideos[user];
       }
     }
-    window.location.href = '/';
+    this.stream = null;
+    this.screenStream = null;
+    this.video.destroy();
+    this.socket.close();
+    //window.location.href = '/';
   }
 }
 
-/**
- * generation UUID4 code
- * @returns {string}
- * @constructor
- */
-export const UUID4 = function () {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-};
 
 
 

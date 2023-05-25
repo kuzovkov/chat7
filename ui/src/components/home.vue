@@ -44,8 +44,7 @@
         methods: {
             async onSubmit (){
                 if (this.$refs.form.validate()){
-                    const options = {username: this.username, room: this.room};
-                    this.$store.dispatch('setUsername', options)
+                    this.$store.dispatch('checkUsername', {username: this.username, room: this.room})
                             .then(() => {
                                 this.$router.push(`/room/${this.room}`);
                             })
@@ -72,3 +71,7 @@
 
     }
 </script>
+
+<style scoped>
+
+</style>

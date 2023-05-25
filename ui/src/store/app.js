@@ -45,8 +45,9 @@ export default {
       commit('clearError');
       commit('setLoading', true);
       try{
-        const options = {username: payload.username, room: payload.room}
+        const options = {username: payload.username, room: payload.room, vueComponent: payload.vueComponent}
         const app = new App(options);
+        console.log('app:', app)
         commit('setApp', app);
         commit('setLoading', false);
       }catch(error){
@@ -58,7 +59,10 @@ export default {
     clearUsername({commit}){
       commit('clearUsername');
     },
-    async setUsername({commit}, {username, room}){
+    setUsername({commit}, username){
+      commit('setUsername', username);
+    },
+    async checkUsername({commit}, {username, room}){
       commit('clearError');
       commit('setLoading', true);
       let users_online = [];

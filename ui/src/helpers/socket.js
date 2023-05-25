@@ -71,6 +71,10 @@ export class Socket {
         }
     }
 
+    close(){
+        this.socket.close();
+    }
+
 
 }
 

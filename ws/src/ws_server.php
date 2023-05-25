@@ -72,7 +72,7 @@ class WebsocketServer
      */
     private function onConnection(Request $request): void {
         echo "client-{$request->fd} is connected\n";
-        var_dump($request->get);
+        //var_dump($request->get);
         $nicname = null;
         $room = null;
         if (isset($request->get)){
